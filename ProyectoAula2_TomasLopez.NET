@@ -1,0 +1,356 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+class Cliente
+{
+    public string Cedula { get; set; }
+    public string Nombre { get; set; }
+    public string Apellidos { get; set; }
+    public int Estrato { get; set; }
+    public int MetaAhorroEnergia { get; set; }
+    public int ConsumoEnergiaAct { get; set; }
+    public int PromedioAgua { get; set; }
+    public int ConsumoAguaAct { get; set; }
+}
+
+class Program
+{
+    static Dictionary<string, Cliente> clientes = new Dictionary<string, Cliente>();
+
+    static void Main(string[] args)
+    {
+        bool salir = false;
+
+        do
+        {
+            MostrarMenu();
+            int opcion = LeerOpcion();
+
+            switch (opcion)
+            {
+                case 1:
+                    AgregarCliente();
+                    break;
+                case 2:
+                    ActualizarCliente();
+                    break;
+                case 3:
+                    EliminarCliente();
+                    break;
+                case 4:
+                    CalcularFacturaCliente();
+                    break;
+                case 5:
+                    CalcularPromedioConsumoEnergia();
+                    break;
+                case 6:
+                    VerTotalDescuentos();
+                    break;
+                case 7:
+                    VerTotalAguaExcedente();
+                    break;
+                case 8:
+                    VerPorcentajeExcesivoAguaEstrato();
+                    break;
+                case 9:
+                    VerClienteMayorDesfase();
+                    break;
+                case 10:
+                    VerEstratoMayorAhorroAgua();
+                    break;
+                case 11:
+                    VerEstratoMayorMenorConsumoEnergia();
+                    break;
+                case 12:
+                    ValorTotalPagar();
+                    break;
+                case 13:
+                    salir = true;
+                    break;
+                default:
+                    Console.WriteLine("Opción invalida. Coloque un número del 1 al 13.");
+                    break;
+
+
+            }
+        } while (!salir);
+    }
+
+    static void MostrarMenu()
+    {
+        Console.WriteLine("\nMenú Opciones EPM ");
+        Console.WriteLine("1. Agregar Cliente ");
+        Console.WriteLine("2. Actualizar información del cliente ");
+        Console.WriteLine("3. Eliminar Cliente ");
+        Console.WriteLine("4. Factura del cliente ");
+        Console.WriteLine("5. Promedio consumo de energia ");
+        Console.WriteLine("6. Descuentos por incentivo de energia ");
+        Console.WriteLine("7. Total de metros cúbicos de agua consumidos por encima del promedio ");
+        Console.WriteLine("8. Porcentajes de consumo excesivo de agua por estrato ");
+        Console.WriteLine("9. Cliente con mayor desfase de energia ");
+        Console.WriteLine("10. Estrato con mayor ahorro de agua ");
+        Console.WriteLine("11. Estrato con mayor y menor consumo de energia ");
+        Console.WriteLine("12. Valor total energia y agua ");
+        Console.WriteLine("13. Salir ");
+        Console.Write("Coloque el número de la opcion que desea realizar: ");
+
+    }
+    static int LeerOpcion()
+    {
+        int opcion;
+        while (!int.TryParse(Console.ReadLine(), out opcion) || opcion < 1 || opcion > 13)
+        {
+            Console.Write(" Opcion inválida. Ingrese un número del 1 al 13: ");
+
+        }
+        return opcion;
+
+
+    }
+    static void AgregarCliente()
+    {
+        Cliente cliente = new Cliente();
+        Console.WriteLine("\nColoque los datos del cliente: ");
+        Console.Write("Cédula: ");
+        cliente.Cedula = Console.ReadLine();
+        Console.Write("Nombre: ");
+        cliente.Nombre = Console.ReadLine();
+        Console.Write("Apellidos: ");
+        cliente.Apellidos = Console.ReadLine();
+        Console.Write("Estrato: ");
+        cliente.Estrato = int.Parse(Console.ReadLine());
+        Console.Write("Meta ahorro energia: ");
+        cliente.MetaAhorroEnergia = int.Parse(Console.ReadLine());
+        Console.Write("Consumo actual de energia: ");
+        cliente.ConsumoEnergiaAct = int.Parse(Console.ReadLine());
+        Console.Write("Promedio consumo de agua: ");
+        cliente.PromedioAgua = int.Parse(Console.ReadLine());
+        Console.Write("Consumo actual de agua: ");
+        cliente.ConsumoAguaAct = int.Parse(Console.ReadLine());
+
+        clientes.Add(cliente.Cedula, cliente);
+        Console.WriteLine("Cliente agregado con éxito. ");
+
+    }
+
+    static void ActualizarCliente()
+    {
+        Console.Write("\nCédula del cliente que desea actualizar: ");
+        string cedula = Console.ReadLine();
+
+        if (clientes.ContainsKey(cedula))
+        {
+            Cliente cliente = clientes[cedula];
+            Console.WriteLine("Ingresar nuevo cliente: ");
+            Console.Write("Nombre: ");
+            cliente.Nombre = Console.ReadLine();
+            Console.Write("Apellidos: ");
+            cliente.Apellidos = Console.ReadLine();
+            Console.Write("Estrato: ");
+            cliente.Estrato = int.Parse(Console.ReadLine());
+            Console.Write("Meta de ahorro de energía: ");
+            cliente.MetaAhorroEnergia = int.Parse(Console.ReadLine());
+            Console.Write("Consumo actual de energía: ");
+            cliente.ConsumoEnergiaAct = int.Parse(Console.ReadLine());
+            Console.Write("Promedio de consumo de agua: ");
+            cliente.PromedioAgua = int.Parse(Console.ReadLine());
+            Console.Write("Consumo actual de agua: ");
+            cliente.ConsumoAguaAct = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Cliente actualizado con éxito.");
+        }
+        else
+        {
+            Console.WriteLine(" Cliente no encontrado.");
+        }
+
+
+    }
+
+    static void EliminarCliente()
+    {
+        Console.Write("\nCedula del cliente que desea eiminar: ");
+        string cedula = Console.ReadLine();
+
+        if (clientes.ContainsKey(cedula))
+        {
+            clientes.Remove(cedula);
+            Console.WriteLine("Cliente eliminado con éxito. ");
+            {
+                else
+                {
+                    Console.WriteLine("Cliente no encontrado.");
+                }
+            }
+        }
+    }
+
+    static void CalcularFacturaCliente()
+    {
+        Console.Write("\nCedula del cliente para su factura: ");
+        string cedula = Console.ReadLine();
+
+        if (clientes.ContainsKey(cedula))
+        {
+            Cliente cliente = clientes[cedula];
+            int ValorEnergia = cliente.ConsumoEnergiaAct * 850;
+            int ValorAgua = OpValorAgua(cliente.PromedioAgua, cliente.ConsumoAguaAct);
+
+            int Incentivo = (cliente.MetaAhorroEnergia - cliente.ConsumoEnergiaAct) * 850;
+            if (Incentivo < 0) Incentivo = 0;
+
+            int FacturaTotal = ValorEnergia + ValorAgua - Incentivo;
+
+            Console.WriteLine($" Valor a pagar por energia: ${ValorEnergia}");
+            Console.WriteLine($" Valor a pagar por agua: ${ValorAgua}");
+            Console.WriteLine($" Descuento por incentivo: ${Incentivo}");
+            Console.WriteLine($" Total factura: ${FacturaTotal}");
+        }
+        else
+        {
+            Console.WriteLine("Cliente no encontrado. ");
+        }
+    }
+
+    static int OpValorAgua(int promedio, int ConsumoActual)
+    {
+        int ValorAgua = 0;
+        if (ConsumoActual > promedio)
+        {
+            int Exceso = ConsumoActual - promedio;
+            ValorAgua = promedio * 4600 + Exceso * 2 * 4600;
+        }
+        else
+        {
+            ValorAgua = ConsumoActual * 4600;
+
+        }
+        return ValorAgua;
+
+    }
+
+    static void CalcularPromedioConsumoEnergia()
+    {
+        if (clientes.Count == 0)
+        {
+            Console.WriteLine(" Sin clientes registrados. ");
+            return;
+        }
+
+        int ConsumoTotal = clientes.Sum(c => c.Value.ConsumoEnergiaAct);
+        double promedio = (double)ConsumoTotal / clientes.Count;
+        Console.WriteLine($"Promedio consumo de energia: {promedio:F2} kW");
+
+    }
+
+    static void VerTotalDescuentos()
+    {
+        int TotalDescuentos = 0;
+        foreach (var cliente in clientes.Values)
+        {
+            int Incentivo = (cliente.MetaAhorroEnergia - cliente.ConsumoEnergiaAct) * 850;
+            if (Incentivo < 0) Incentivo = 0;
+            TotalDescuentos += Incentivo;
+        }
+        Console.WriteLine($"Descuento por incentivo de energia: {TotalDescuentos}");
+    }
+
+    static void VerTotalAguaExcedente()
+    {
+        int TotalAguaExcedente = clientes.Sum(c => Math.Max(0, c.Value.ConsumoAguaAct - c.Value.PromedioAgua));
+        Console.WriteLine($"Metros cúbicos de agua consumidos por encima del promedio: {TotalAguaExcedente} m3");
+    }
+
+
+    static void VerPorcentajeExcesivoAguaEstrato()
+    {
+        var PorcentajeEstrato = new Dictionary<int, double>();
+        foreach (var cliente in clientes.Values)
+        {
+            if (!PorcentajeEstrato.ContainsKey(cliente.Estrato))
+            {
+                PorcentajeEstrato[cliente.Estrato] = 0;
+            }
+            double Exceso = Math.Max(0, cliente.ConsumoAguaAct - cliente.PromedioAgua);
+            double Porcentaje = (Exceso / cliente.PromedioAgua) * 100;
+            PorcentajeEstrato[cliente.Estrato] += Porcentaje;
+        }
+        Console.WriteLine("Porcentaje consumo excesivo de agua por estrato: ");
+        foreach (var kvp in PorcentajeEstrato)
+        {
+            Console.WriteLine($"Estrato {kvp.Key}: {kvp.Value:F2}%");
+        }
+    }
+
+
+    static void VerClienteMayorDesfase()
+    {
+        Cliente MayorDesfase = clientes.Values.OrderByDescending(c => Math.Abs(c.MetaAhorroEnergia - c.ConsumoEnergiaAct)).First();
+        Console.WriteLine($"Cliente con mayor desfase de energia: ");
+        DatosCliente(MayorDesfase);
+    }
+
+
+
+    static void VerEstratoMayorAhorroAgua()
+    {
+        var PromedioEstrato = new Dictionary<int, int>();
+        foreach (var cliente in clientes.Values)
+        {
+            if (!PromedioEstrato.ContainsKey(cliente.Estrato))
+            {
+                PromedioEstrato[cliente.Estrato] += cliente.PromedioAgua;
+            }
+        }
+        int EstratoMayorAhorroAgua = PromedioEstrato.OrderByDescending(kvp => kvp.Value).First().Key;
+        Console.WriteLine($"Estrato con mayor ahorro de agua: {EstratoMayorAhorroAgua}");
+    }
+
+
+
+    static void VerEstratoMayorMenorConsumoEnergia()
+    {
+        var ConsumoEstrato = new Dictionary<int, int>();
+        foreach (var cliente in clientes.Values)
+        {
+            if (!ConsumoEstrato.ContainsKey(cliente.Estrato))
+            {
+                ConsumoEstrato[cliente.Estrato] = 0;
+            }
+            ConsumoEstrato[cliente.Estrato] += cliente.ConsumoEnergiaAct;
+        }
+        int MayorConsumoEstrato = ConsumoEstrato.OrderByDescending(kvp => kvp.Value).First().Key;
+        int MenorConsumoEstrato = ConsumoEstrato.OrderBy(kvp => kvp.Value).First().Key;
+
+        Console.WriteLine($"Estrato con mayor consumo de energia: {MayorConsumoEstrato} ");
+        Console.WriteLine($"Estrato con menor consumo de energia: {MenorConsumoEstrato} ");
+    }
+
+
+
+    static void ValorTotalPagar()
+    {
+        int TotalEnergia = clientes.Sum(c => c.Value.ConsumoEnergiaAct * 850);
+        int TotalAgua = clientes.Sum(c => OpValorAgua(c.Value.PromedioAgua, c.Value.ConsumoAguaAct));
+        int TotalPago = TotalEnergia + TotalAgua;
+
+        Console.WriteLine($"Total a pagar por energia: ${TotalEnergia}");
+        Console.WriteLine($"Total a pagar por agua: ${TotalAgua}");
+        Console.WriteLine($"Total a pagar: ${TotalPago}");
+    }
+
+
+    static void DatosCliente(Cliente cliente)
+    {
+        Console.WriteLine($"Cédula: {cliente.Cedula}");
+        Console.WriteLine($"Nombre: {cliente.Nombre}");
+        Console.WriteLine($"Apellidos: {cliente.Apellidos}");
+        Console.WriteLine($"Estrato: {cliente.Estrato}");
+        Console.WriteLine($"Meta de ahorro de energía: {cliente.MetaAhorroEnergia} kW");
+        Console.WriteLine($"Consumo actual de energía: {cliente.ConsumoEnergiaAct} kW");
+        Console.WriteLine($"Promedio de consumo de agua: {cliente.PromedioAgua} m3");
+        Console.WriteLine($"Consumo actual de agua: {cliente.ConsumoAguaAct} m3");
+    }
+
+}
